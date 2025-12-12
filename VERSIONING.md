@@ -1,15 +1,13 @@
 # Versioning Strategy
 
-## Package Versioning
+## Automatic Versioning
 
-Versions in `package.json` are automatically bumped when code is merged to `main`.
+Versions are automatically bumped when code is merged to `main` based on commit message prefixes:
 
-**Commit format:**
-- `feat:` → Minor bump (1.0.0 → 1.1.0)
-- `fix:` → Patch bump (1.0.0 → 1.0.1)
-- `feat!:` → Major bump (1.0.0 → 2.0.0)
-
-**Feature branches:** Not versioned. Version only updates on `main`.
+- `fix:` → Patch (0.0.X)
+- `feat:` → Minor (0.X.0)
+- `feat!:` or `BREAKING CHANGE:` → Major (X.0.0)
+- No prefix or `chore:`, `docs:`, `style:` → No version bump
 
 ## Docker Versioning
 
@@ -23,3 +21,15 @@ myapp:latest
 ```
 myapp:feature-name-abc1234 (branch + commit SHA)
 ```
+
+## Template Repository Setup
+
+This is a template repository. When creating a new project from this template:
+
+1. Start with version `0.0.0` in `package.json`
+2. The versioning workflow is ready to use
+3. First `feat:` commit will bump to `1.0.0`
+
+**To disable versioning in this template repo:**
+- Don't use `feat:` or `fix:` commit prefixes
+- Or disable the GitHub Actions workflow
