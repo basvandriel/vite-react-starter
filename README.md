@@ -1,0 +1,160 @@
+# Vite React Starter
+
+A modern, lightweight React starter template with Vite, TypeScript, TailwindCSS, and optional testing frameworks.
+
+## Features
+
+### Core (Always Included)
+- ⚡️ [Vite](https://vitejs.dev/) - Lightning fast build tool
+- ⚛️ [React 19](https://react.dev/) - Latest React with concurrent features
+- 🔷 [TypeScript](https://www.typescriptlang.org/) - Type safety
+- 🎨 [TailwindCSS 4](https://tailwindcss.com/) - Utility-first CSS
+- 🚦 [React Router 7](https://reactrouter.com/) - Client-side routing
+- 📏 [ESLint](https://eslint.org/) - Code linting
+- 🔄 [Semantic Release](https://semantic-release.gitbook.io/) - Automated versioning
+
+### Optional Features
+- 🧪 **Vitest** - Fast unit testing framework with React Testing Library
+- 🎭 **Playwright** - Reliable end-to-end testing framework
+
+## Getting Started
+
+### Using this template
+
+1. Click "Use this template" on GitHub to create your own repository
+2. Clone your new repository
+3. Install dependencies: `npm install`
+4. Run the setup script to configure optional features:
+
+**Interactive mode:**
+```bash
+npm run setup
+```
+
+**Non-interactive mode:**
+```bash
+# Install all features
+node setup.js --all
+
+# Install specific features
+node setup.js --vitest
+node setup.js --playwright
+node setup.js --vitest --playwright
+
+# Show help
+node setup.js --help
+```
+
+The setup script will:
+- Add the selected features to your project
+- Install necessary dependencies
+- Create configuration files and sample tests
+- Update package.json with new scripts
+
+### Manual setup (without optional features)
+
+If you prefer to start with just the core features:
+
+```bash
+npm install
+npm run dev
+```
+
+You can always run `npm run setup` later to add optional features.
+
+## Available Scripts
+
+### Core Scripts
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+
+### Testing Scripts (if enabled)
+
+**Vitest:**
+- `npm run test` - Run unit tests
+- `npm run test:ui` - Run tests with UI
+- `npm run test:coverage` - Run tests with coverage report
+
+**Playwright:**
+- `npm run test:e2e` - Run e2e tests
+- `npm run test:e2e:ui` - Run e2e tests with UI
+- `npm run test:e2e:debug` - Debug e2e tests
+
+> **Note:** For Playwright, run `npx playwright install` after setup to install browsers.
+
+## Project Structure
+
+```
+├── src/
+│   ├── App.tsx              # Main App component
+│   ├── main.tsx             # Application entry point
+│   ├── index.css            # Global styles
+│   ├── test/                # Test setup (if Vitest enabled)
+│   └── assets/              # Static assets
+├── e2e/                     # E2E tests (if Playwright enabled)
+├── public/                  # Public static files
+├── .github/
+│   └── workflows/           # CI/CD workflows
+├── vite.config.ts           # Vite configuration
+├── vitest.config.ts         # Vitest configuration (if enabled)
+├── playwright.config.ts     # Playwright configuration (if enabled)
+├── tsconfig.json            # TypeScript configuration
+└── eslint.config.js         # ESLint configuration
+```
+
+## Versioning
+
+This template uses [semantic-release](https://semantic-release.gitbook.io/) for automated versioning. See [VERSIONING.md](./VERSIONING.md) for details.
+
+**Commit message format:**
+- `feat:` - New feature (bumps minor version)
+- `fix:` - Bug fix (bumps patch version)
+- `feat!:` or `BREAKING CHANGE:` - Breaking change (bumps major version)
+
+## Removing Features
+
+If you want to remove a feature after installing it:
+
+1. **Remove dependencies** from `package.json`
+2. **Remove scripts** from `package.json`
+3. **Delete configuration files** (e.g., `vitest.config.ts`, `playwright.config.ts`)
+4. **Delete test directories** (e.g., `src/test/`, `e2e/`)
+5. Run `npm install` to clean up
+
+## Extending the Setup Script
+
+To add new optional features to the setup script, edit `setup.js` and add a new feature object to the `features` array:
+
+```javascript
+{
+  name: 'feature-name',
+  description: 'Feature Name - Short Description',
+  dependencies: {
+    dev: ['package1', 'package2'],  // Dev dependencies
+    prod: ['package3']               // Optional: Production dependencies
+  },
+  scripts: {
+    'script-name': 'command'
+  },
+  files: {
+    'path/to/file.ext': 'file content...'
+  }
+}
+```
+
+The setup script will automatically:
+- Add the feature to the interactive selection menu
+- Support a `--feature-name` CLI flag
+- Install dependencies
+- Add scripts to package.json
+- Create configuration files
+
+## Contributing
+
+This is a template repository. Feel free to customize it for your needs!
+
+## License
+
+MIT
