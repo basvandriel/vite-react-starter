@@ -123,6 +123,34 @@ If you want to remove a feature after installing it:
 4. **Delete test directories** (e.g., `src/test/`, `e2e/`)
 5. Run `npm install` to clean up
 
+## Extending the Setup Script
+
+To add new optional features to the setup script, edit `setup.js` and add a new feature object to the `features` array:
+
+```javascript
+{
+  name: 'feature-name',
+  description: 'Feature Name - Short Description',
+  dependencies: {
+    dev: ['package1', 'package2'],  // Dev dependencies
+    prod: ['package3']               // Optional: Production dependencies
+  },
+  scripts: {
+    'script-name': 'command'
+  },
+  files: {
+    'path/to/file.ext': 'file content...'
+  }
+}
+```
+
+The setup script will automatically:
+- Add the feature to the interactive selection menu
+- Support a `--feature-name` CLI flag
+- Install dependencies
+- Add scripts to package.json
+- Create configuration files
+
 ## Contributing
 
 This is a template repository. Feel free to customize it for your needs!
