@@ -9,10 +9,17 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const rl = createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+// Parse command line arguments
+const args = process.argv.slice(2);
+const nonInteractive = args.includes('--all') || args.includes('--vitest') || args.includes('--playwright');
+
+let rl;
+if (!nonInteractive) {
+  rl = createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+}
 
 function question(query) {
   return new Promise(resolve => rl.question(query, resolve));
@@ -129,23 +136,51 @@ test('page is accessible', async ({ page }) => {
 
 async function main() {
   console.log('\n🚀 Welcome to Vite React Starter Setup!\n');
-  console.log('This script will help you configure optional features for your project.\n');
   
-  const selectedFeatures = [];
+  let selectedFeatures = [];
   
-  for (const feature of features) {
-    const answer = await question(`Do you want to install ${feature.description}? (y/N): `);
-    if (answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes') {
-      selectedFeatures.push(feature);
-      console.log(`✓ ${feature.description} will be installed\n`);
-    } else {
-      console.log(`✗ ${feature.description} will be skipped\n`);
+  // Handle command line arguments
+  if (args.includes('--help') || args.includes('-h')) {
+    console.log('Usage: node setup.js [options]');
+    console.log('\nOptions:');
+    console.log('  --all            Install all optional features');
+    console.log('  --vitest         Install Vitest (unit testing)');
+    console.log('  --playwright     Install Playwright (e2e testing)');
+    console.log('  --help, -h       Show this help message');
+    console.log('\nInteractive mode:');
+    console.log('  Run without arguments to interactively select features\n');
+    return;
+  }
+  
+  if (args.includes('--all')) {
+    selectedFeatures = [...features];
+    console.log('Installing all optional features...\n');
+  } else if (args.includes('--vitest') || args.includes('--playwright')) {
+    for (const feature of features) {
+      if (args.includes(`--${feature.name}`)) {
+        selectedFeatures.push(feature);
+        console.log(`✓ ${feature.description} will be installed`);
+      }
+    }
+    console.log('');
+  } else {
+    // Interactive mode
+    console.log('This script will help you configure optional features for your project.\n');
+    
+    for (const feature of features) {
+      const answer = await question(`Do you want to install ${feature.description}? (y/N): `);
+      if (answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes') {
+        selectedFeatures.push(feature);
+        console.log(`✓ ${feature.description} will be installed\n`);
+      } else {
+        console.log(`✗ ${feature.description} will be skipped\n`);
+      }
     }
   }
   
   if (selectedFeatures.length === 0) {
     console.log('\nNo additional features selected. Your project is ready to use!');
-    rl.close();
+    if (rl) rl.close();
     return;
   }
   
@@ -244,11 +279,11 @@ async function main() {
   
   console.log('\n🎉 Happy coding!\n');
   
-  rl.close();
+  if (rl) rl.close();
 }
 
 main().catch(error => {
   console.error('Error:', error);
-  rl.close();
+  if (rl) rl.close();
   process.exit(1);
 });

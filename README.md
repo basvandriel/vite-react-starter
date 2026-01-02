@@ -23,27 +23,44 @@ A modern, lightweight React starter template with Vite, TypeScript, TailwindCSS,
 
 1. Click "Use this template" on GitHub to create your own repository
 2. Clone your new repository
-3. Run the setup script to configure optional features:
+3. Install dependencies: `npm install`
+4. Run the setup script to configure optional features:
 
+**Interactive mode:**
 ```bash
-npm install
-node setup.js
+npm run setup
 ```
 
-The setup script will ask you which optional features you want to install:
-- **Vitest**: For unit and component testing
-- **Playwright**: For end-to-end browser testing
+**Non-interactive mode:**
+```bash
+# Install all features
+node setup.js --all
 
-### Manual setup (skip setup script)
+# Install specific features
+node setup.js --vitest
+node setup.js --playwright
+node setup.js --vitest --playwright
 
-If you prefer to start with the minimal setup:
+# Show help
+node setup.js --help
+```
+
+The setup script will:
+- Add the selected features to your project
+- Install necessary dependencies
+- Create configuration files and sample tests
+- Update package.json with new scripts
+
+### Manual setup (without optional features)
+
+If you prefer to start with just the core features:
 
 ```bash
 npm install
 npm run dev
 ```
 
-You can always run `node setup.js` later to add optional features.
+You can always run `npm run setup` later to add optional features.
 
 ## Available Scripts
 
