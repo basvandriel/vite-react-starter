@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { execSync } from 'child_process';
 import { createInterface } from 'readline';
 import { resolve, dirname } from 'path';
@@ -195,18 +195,20 @@ async function main() {
   for (const feature of selectedFeatures) {
     console.log(`\nConfiguring ${feature.description}...`);
     
-    // Add dev dependencies
+    // Add dev dependencies - versions will be resolved during npm install
     if (feature.dependencies.dev) {
       packageJson.devDependencies = packageJson.devDependencies || {};
       console.log(`  Adding dev dependencies: ${feature.dependencies.dev.join(', ')}`);
+      // Note: We don't add versions to package.json here.
+      // The npm install command below will add them with the latest compatible versions.
     }
     
     // Add dependencies
     if (feature.dependencies.prod) {
       packageJson.dependencies = packageJson.dependencies || {};
-      for (const dep of feature.dependencies.prod) {
-        packageJson.dependencies[dep] = 'latest';
-      }
+      console.log(`  Adding dependencies: ${feature.dependencies.prod.join(', ')}`);
+      // Note: We don't add versions to package.json here.
+      // The npm install command below will add them with the latest compatible versions.
     }
     
     // Add scripts
@@ -239,20 +241,29 @@ async function main() {
   
   // Install dependencies
   console.log('\n📥 Installing dependencies...');
-  const deps = selectedFeatures
+  const devDeps = selectedFeatures
     .flatMap(f => f.dependencies.dev || [])
     .join(' ');
+  const prodDeps = selectedFeatures
+    .flatMap(f => f.dependencies.prod || [])
+    .join(' ');
   
-  if (deps) {
-    try {
-      execSync(`npm install --save-dev ${deps}`, { 
+  try {
+    if (devDeps) {
+      execSync(`npm install --save-dev ${devDeps}`, { 
         stdio: 'inherit',
         cwd: __dirname 
       });
-      console.log('\n✓ Dependencies installed successfully!');
-    } catch (error) {
-      console.error('\n✗ Failed to install dependencies. Please run npm install manually.');
     }
+    if (prodDeps) {
+      execSync(`npm install --save ${prodDeps}`, { 
+        stdio: 'inherit',
+        cwd: __dirname 
+      });
+    }
+    console.log('\n✓ Dependencies installed successfully!');
+  } catch (error) {
+    console.error('\n✗ Failed to install dependencies. Please run npm install manually.');
   }
   
   // Print summary
